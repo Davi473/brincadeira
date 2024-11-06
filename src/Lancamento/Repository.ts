@@ -7,21 +7,7 @@ export default interface LancamentoDAO {
     insert(lancamento: LancamentoInsert): Promise<void>;
 }
 
-export class LancamentoDAODataBase implements LancamentoDAO
-{
-    select(userId: string, lancamentoId?: string): Promise<any> {
-        throw new Error("Method not implemented.");
-    }
-    delete(userId: string, lancamentoId: string): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    update(userId: string, lancamento: LancamentoUpdate): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    insert(lancamento: LancamentoInsert): Promise<void> {
-        throw new Error("Method not implemented.");
-    }   
-}
+// export class LancamentoDAODataBase implements LancamentoDAO {}
 
 export class LancamentoDAOMemoria implements LancamentoDAO
 {
@@ -29,16 +15,26 @@ export class LancamentoDAOMemoria implements LancamentoDAO
 
     async select(userId: string, lancamentoId?: string): Promise<any>
     {
-        return this.lancamentoMemory.filter(lancamentos => lancamentos.id_user === userId);
+        let lancamentos = this.lancamentoMemory.filter(_lancamento => _lancamento.id_user === userId);
+        if (lancamentoId) lancamentos = lancamentos.filter(_lancamento => _lancamento.id === lancamentoId);
+        return lancamentos;  
     }
-    delete(userId: string, lancamentoId: string): Promise<void> 
+
+    async delete(userId: string, lancamentoId: string): Promise<void> 
     {
-        throw new Error("Method not implemented.");
+        const index = this.lancamentoMemory.findIndex((lancamento) => lancamento.id === lancamentoId);
+        this.lancamentoMemory.slice(index, index + 1);
     }
-    update(userId: string, lancamento: LancamentoUpdate): Promise<void> 
+
+    async update(userId: string, lancamento: LancamentoUpdate): Promise<void> 
     {
-        throw new Error("Method not implemented.");
+        const index = this.lancamentoMemory.findIndex((lancamento) => lancamento.id === lancamento.id);
+        this.lancamentoMemory[index].quantidade = lancamento.quantidade;
+        this.lancamentoMemory[index].preco = lancamento.preco;
+        this.lancamentoMemory[index].data = lancamento.data;
+        this.lancamentoMemory[index].compra = lancamento.compra;
     }
+
     async insert(lancamento: LancamentoInsert): Promise<void>
     {
         this.lancamentoMemory.push(lancamento);
@@ -54,6 +50,7 @@ type LancamentoUpdate = {
 }
 
 export type LancamentoInsert = {
+    id?: string,
     id_ativo: string
     id_user: string
     quantidade: number, 

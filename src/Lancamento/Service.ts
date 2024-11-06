@@ -1,13 +1,16 @@
 import crypto from "crypto";
 import LancamentoDAO from "./Repository";
+import AtivoService from "../Ativo/Service";
 
 export default class LancamentoService
 {
     constructor (
         private repository: LancamentoDAO,
         private serviceAtivo: AtivoService,
+        /*
         private serviceUser: UserService,
         private serviceCarteira: CarteiraService
+        */
 
     ) {}
 
@@ -17,7 +20,7 @@ export default class LancamentoService
         if (lancamento.preco > 0) throw new Error("Lançamento não posssui valor");
         if (!lancamento.date) throw new Error("Não tem data");
         if (lancamento.compra !== true && lancamento.compra !== false) throw new Error("Não possui ordem de compra ou venda");
-        const id_ativo = await this.serviceAtivo.getTicket(lancamento.ticket);
+        const id_ativo = await this.serviceAtivo.get(lancamento);
         if (!id_ativo) throw new Error("ativo não encontrado");
         const _lancamento = {
             id: crypto.randomUUID(),
@@ -38,6 +41,11 @@ export default class LancamentoService
         return { lancamentos };
     }
 
+    async getID (userId: string, lancamentoId: string)
+    {
+        return this.existeLancamento(userId, lancamentoId);
+    }
+
     async delete (userId: string, lancamento: any)
     {
         this.existeLancamento(userId, lancamento.id);
@@ -55,7 +63,7 @@ export default class LancamentoService
     {
         const existeLancamento = this.repository.select(userId, lancamentoId);
         if (!existeLancamento) throw new Error("Lançamento não existe");
-        return;
+        return existeLancamento;
     }
 }
 
