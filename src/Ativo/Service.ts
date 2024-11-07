@@ -22,13 +22,10 @@ export default class AtivoService
         return _ativo.id;
     }
 
-    async get (ativo: { id?: string, ticket?: string, tipo?: string })
+    async get (ativo?: any)
     {
-        let output;
-        if(ativo) 
-            return output = await this.repository.select(ativo);
-        console.log("sdfsdf")
-        return output = await this.repository.select(ativo);
+        if(ativo) return await this.repository.select(ativo);
+        return await this.repository.select(ativo);
     }
 
     async delete (ativo: any)

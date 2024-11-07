@@ -1,30 +1,30 @@
 import pgp from "pg-promise";
 
-export default interface LancamentoDAO {
+export default interface AtivoDAO {
     select(ativo: { id?: string, tipo?: string, ticket?: string }): Promise<any>;
-    delete(ativo: AtivoInsert): Promise<void>;
+    delete(ativoID: string): Promise<void>;
     update(ativo: AtivoInsert): Promise<void>;
     insert(ativo: AtivoInsert): Promise<void>;
 }
 
-//export class LancamentoDAODataBase implements LancamentoDAO {}
+//export class AtivoDAODataBase implements AtivoDAO {}
 
-export class AtivoDAOMemoria implements LancamentoDAO
+export class AtivoDAOMemoria implements AtivoDAO
 {
     private ativoMemory: AtivoInsert[] = [];
 
     async select (ativo: { id?: string, tipo?: string, ticket?: string }): Promise<any> 
     {
         let output;
-        if (ativo.id) return output = await this.ativoMemory.filter(_ativo => _ativo.id === ativo.id);
-        if (ativo.tipo) return output = await this.ativoMemory.filter(_ativo => _ativo.tipo === ativo.tipo);
-        if (ativo.ticket) return output = await this.ativoMemory.filter(_ativo => _ativo.ticket === ativo.ticket);
-        return output = this.ativoMemory; 
+        if (ativo.id) return await this.ativoMemory.filter(_ativo => _ativo.id === ativo.id);
+        if (ativo.tipo) return await this.ativoMemory.filter(_ativo => _ativo.tipo === ativo.tipo);
+        if (ativo.ticket) return await this.ativoMemory.filter(_ativo => _ativo.ticket === ativo.ticket);
+        return this.ativoMemory; 
     }
 
-    async delete(ativo: AtivoInsert): Promise<void> 
+    async delete(ativoID: string): Promise<void> 
     {
-        const index: number = this.ativoMemory.findIndex((_ativo) => _ativo.id === ativo.id);
+        const index: number = this.ativoMemory.findIndex((ativo) => ativo.id === ativoID);
         this.ativoMemory.slice(index, index + 1);
     }
 

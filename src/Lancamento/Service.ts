@@ -6,12 +6,10 @@ export default class LancamentoService
 {
     constructor (
         private repository: LancamentoDAO,
-        private serviceAtivo: AtivoService,
+        private serviceAtivo: AtivoService
         /*
-        private serviceUser: UserService,
         private serviceCarteira: CarteiraService
         */
-
     ) {}
 
     async post (userId: string, lancamento: any)

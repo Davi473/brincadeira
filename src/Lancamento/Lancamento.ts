@@ -1,16 +1,11 @@
-import express, { Express } from "express"; 
+import { Express } from "express";
 import LancamentoService from "./Service";
 
-export default class LancamentoAPI
+export default class LancamentoController
 {
-    public api: Express = express();
-
-    constructor (private service: LancamentoService) 
-    {
-        this.api.use(express.json());
-    }
-
-    build ()
+    constructor (
+        private api: Express,
+        private service: LancamentoService) 
     {
         this.api.post("/lancamento", async (req: any, res: any) =>
         {
