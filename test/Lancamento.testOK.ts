@@ -2,7 +2,7 @@ import axios from "axios";
 
 test("testando post AtivosApi POST", async function()
 {
-    let lancamentoGet: string;
+    let lancamentoGet: string | null = null;
     const newLancamento =  {
                 ticket: "VALE3",
                 quantidade: 10,
@@ -25,7 +25,6 @@ test("testando post AtivosApi POST", async function()
         const output: any = await axios.get("http://localhost:3000/lancamento");
         const lancamento = output.data[0];
         lancamentoGet = lancamento.id;
-        console.log(lancamento);
         expect(lancamento.preco).toBe(newLancamento.preco); 
     }
 
@@ -62,4 +61,6 @@ test("testando post AtivosApi POST", async function()
     await post();
     await get();
     await put();
+    console.log(lancamentoGet);
+    await deleteL();
 });

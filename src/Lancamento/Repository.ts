@@ -24,7 +24,7 @@ export class LancamentoDAOMemoria implements LancamentoDAO
     {
         const index = this.lancamentoMemory.findIndex((_lancamento) =>
             (_lancamento.id === lancamentoId && _lancamento.id_user == userId));
-        this.lancamentoMemory.slice(index, index + 1);
+        this.lancamentoMemory.splice(index, (index + 1));
     }
 
     async update(userId: string, lancamento: LancamentoUpdate): Promise<void> 
