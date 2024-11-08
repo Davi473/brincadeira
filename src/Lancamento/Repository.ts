@@ -15,20 +15,22 @@ export class LancamentoDAOMemoria implements LancamentoDAO
 
     async select(userId: string, lancamentoId?: string): Promise<any>
     {
-        let lancamentos = this.lancamentoMemory.filter(_lancamento => _lancamento.id_user === userId);
-        if (lancamentoId) lancamentos = lancamentos.filter(_lancamento => _lancamento.id === lancamentoId);
-        return lancamentos;  
+        if (lancamentoId) return this.lancamentoMemory.filter(_lancamento => 
+            (_lancamento.id === lancamentoId && _lancamento.id_user === userId));
+        return this.lancamentoMemory.filter(_lancamento => _lancamento.id_user === userId);
     }
 
     async delete(userId: string, lancamentoId: string): Promise<void> 
     {
-        const index = this.lancamentoMemory.findIndex((lancamento) => lancamento.id === lancamentoId);
+        const index = this.lancamentoMemory.findIndex((_lancamento) =>
+            (_lancamento.id === lancamentoId && _lancamento.id_user == userId));
         this.lancamentoMemory.slice(index, index + 1);
     }
 
     async update(userId: string, lancamento: LancamentoUpdate): Promise<void> 
     {
-        const index = this.lancamentoMemory.findIndex((lancamento) => lancamento.id === lancamento.id);
+        const index = this.lancamentoMemory.findIndex((_lancamento) => 
+            (_lancamento.id === lancamento.id && _lancamento.id_user === userId));
         this.lancamentoMemory[index].quantidade = lancamento.quantidade;
         this.lancamentoMemory[index].preco = lancamento.preco;
         this.lancamentoMemory[index].data = lancamento.data;

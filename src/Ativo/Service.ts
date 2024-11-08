@@ -11,15 +11,15 @@ export default class AtivoService
     {
         if (!ativo.tipo) throw new Error("Ativo não tem tipo");
         if (!ativo.ticket) throw new Error("Ativo não tem ticket");
-        const id_ativo = await this.repository.select({ticket: ativo.ticket});
-        if (!id_ativo) throw new Error("ativo não encontrado");
+        const id_ativo = await this.repository.select({ ticket: ativo.ticket });
+        if (id_ativo[0] !== undefined) throw new Error("Ativo ja existe");
         const _ativo = {
             id: crypto.randomUUID(),
             ticket: ativo.ticket,
             tipo: ativo.tipo
         };
         await this.repository.insert(_ativo);
-        return _ativo.id;
+        return {ativo: _ativo.id};
     }
 
     async get (ativo?: any)
@@ -34,13 +34,4 @@ export default class AtivoService
         if (!existAtivo) throw new Error("Não existe");
         await this.repository.delete(ativo);
     }
-}
-
-type LancamentoModel = {
-    id?: string,
-    ativo: string, 
-    quantidade: number, 
-    preco: number,
-    data: Date,
-    compra: boolean
 }

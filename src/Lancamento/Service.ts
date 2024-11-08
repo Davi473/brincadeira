@@ -15,28 +15,27 @@ export default class LancamentoService
     async post (userId: string, lancamento: any)
     {
         if (lancamento.quantidade < 0) throw new Error("Lançamento não possui quantidade");
-        if (lancamento.preco > 0) throw new Error("Lançamento não posssui valor");
-        if (!lancamento.date) throw new Error("Não tem data");
+        if (lancamento.preco < 0) throw new Error("Lançamento não posssui valor");
+        if (!lancamento.data) throw new Error("Não tem data");
         if (lancamento.compra !== true && lancamento.compra !== false) throw new Error("Não possui ordem de compra ou venda");
-        const id_ativo = await this.serviceAtivo.get(lancamento);
-        if (!id_ativo) throw new Error("ativo não encontrado");
+        const [id_ativo] = await this.serviceAtivo.get(lancamento);
+        if (id_ativo === undefined) throw new Error("ativo não encontrado");
         const _lancamento = {
             id: crypto.randomUUID(),
-            id_ativo,
+            id_ativo: id_ativo.id,
             id_user: userId,
             quantidade: lancamento.quantidade,
             preco: lancamento.preco,
-            data: lancamento.date,
+            data: lancamento.data,
             compra: lancamento.compra
         };
         await this.repository.insert(_lancamento);
-        return _lancamento.id;
+        return {lancamento: _lancamento.id};
     }
 
     async get (userId: string)
     {
-        const lancamentos = await this.repository.select(userId);
-        return { lancamentos };
+        return await this.repository.select(userId);
     }
 
     async getID (userId: string, lancamentoId: string)

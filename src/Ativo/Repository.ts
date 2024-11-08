@@ -11,15 +11,20 @@ export default interface AtivoDAO {
 
 export class AtivoDAOMemoria implements AtivoDAO
 {
-    private ativoMemory: AtivoInsert[] = [];
+    private ativoMemory: AtivoInsert[] = [
+        {
+            "id": "9f20dbc6-be41-44d7-a20e-1dee44eda854",
+            "ticket": "VALE3",
+            "tipo": "Acões"
+        }
+    ];
 
     async select (ativo: { id?: string, tipo?: string, ticket?: string }): Promise<any> 
     {
-        let output;
-        if (ativo.id) return await this.ativoMemory.filter(_ativo => _ativo.id === ativo.id);
-        if (ativo.tipo) return await this.ativoMemory.filter(_ativo => _ativo.tipo === ativo.tipo);
-        if (ativo.ticket) return await this.ativoMemory.filter(_ativo => _ativo.ticket === ativo.ticket);
-        return this.ativoMemory; 
+        if(!ativo) return this.ativoMemory;
+        if (ativo.id !== undefined) return await this.ativoMemory.filter(_ativo => _ativo.id === ativo.id);
+        if (ativo.tipo !== undefined) return await this.ativoMemory.filter(_ativo => _ativo.tipo === ativo.tipo);
+        if (ativo.ticket !== undefined) return await this.ativoMemory.filter(_ativo => _ativo.ticket === ativo.ticket);
     }
 
     async delete(ativoID: string): Promise<void> 
