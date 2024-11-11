@@ -1,14 +1,14 @@
 import { Express } from "express";
-import LancamentoService from "./Service";
+import CarteiraService from "./Service";
 import Token from "../Usuario/Login/Token";
 
 export default class LancamentoController
 {
     constructor (
         private api: Express,
-        private service: LancamentoService
+        private service: CarteiraService
     ) {
-        this.api.post("/lancamento", Token.authToke, async (req: any, res: any) =>
+        this.api.post("/carteira", Token.authToke, async (req: any, res: any) =>
         {
             const {id} = req.user;
             const lancamento = req.body;
@@ -20,7 +20,7 @@ export default class LancamentoController
             }
         });
 
-        this.api.get("/lancamento", Token.authToke, async (req: any, res: any) =>
+        this.api.get("/carteira", Token.authToke, async (req: any, res: any) =>
         {
             const {id} = req.user;
             try {
@@ -31,7 +31,7 @@ export default class LancamentoController
             }
         });
 
-        this.api.put("/lancamento", Token.authToke, async (req: any, res: any) =>
+        this.api.put("/carteira", Token.authToke, async (req: any, res: any) =>
         {
             const {id} = req.user;
             const lancamento = req.body;
@@ -43,7 +43,7 @@ export default class LancamentoController
             }
         });
 
-        this.api.delete("/lancamento", Token.authToke, async (req: any, res: any) => 
+        this.api.delete("/carteira", Token.authToke, async (req: any, res: any) => 
         {
             const {id} = req.user;
             const lancamento = req.body;

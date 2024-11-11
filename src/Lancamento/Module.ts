@@ -4,7 +4,7 @@ import LancamentoDAO, { LancamentoDAOMemoria } from "./Repository";
 import { Express } from "express";
 import LancamentoService from "./Service";
 
-export default class LancamentoModulo
+export default class LancamentoModule
 {   
     private repository: LancamentoDAO;
     private service: LancamentoService;

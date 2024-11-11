@@ -1,7 +1,7 @@
 import { Express } from "express";
 import RegisterService from "./Service";
 
-export default class LancamentoController
+export default class RegisterController
 {
     constructor (
         private api: Express,
@@ -9,12 +9,34 @@ export default class LancamentoController
     ) {
         this.api.post("/register", async (req: any, res: any) =>
         {
-            const user = req.body;
+            const { name, passoword } = req.body;
             try {
-                const output = await this.service.post(user);
+                const output = await this.service.post(name, passoword);
                 res.json(output);
             } catch (e: any) {
                 res.status(422).json({ message: e.message});
+            }
+        });
+
+        this.api.delete("/register", async (req: any, res: any) =>
+        {
+            const { name, passoword } = req.body; 
+            try {
+                const output = await this.service.delete(name, passoword);
+                res.json(output);
+            } catch (e: any) {
+                res.status(422).json({ message: e.message });
+            }
+        });
+
+        this.api.get("/register", async (req: any, res: any) =>
+        {
+            const { name, passoword } = req.body; 
+            try {
+                const output = await this.service.get(name, passoword);
+                res.json(output);
+            } catch (e: any) {
+                res.status(422).json({ message: e.message });
             }
         });
     }

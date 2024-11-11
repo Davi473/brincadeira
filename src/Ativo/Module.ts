@@ -3,7 +3,7 @@ import AtivoController from "./Ativo";
 import AtivoDAO, { AtivoDAOMemoria } from "./Repository";
 import AtivoService from "./Service";
 
-export default class AtivoModulo
+export default class AtivoModule
 {   
     private repository: AtivoDAO;
     private service: AtivoService;

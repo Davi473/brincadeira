@@ -5,8 +5,8 @@ test("testando post AtivosApi POST", async function()
     const output: any = await axios.post(
         "http://localhost:3000/ativo",
         {
-            ticket: "VALE3",
-            tipo: "Acões",
+            ticket: "MXRF11",
+            tipo: "Fiis",
         }
     );
     const id = output.data.ativo;
@@ -16,9 +16,9 @@ test("testando post AtivosApi POST", async function()
 test("testando post AtivosApi GET", async () =>
 {
     const output: any = await axios.get("http://localhost:3000/ativo");
-    const ativo = output.data[0];
+    const ativo = output.data[1];
     ativoGet = ativo.id;
-    expect(ativo.ticket).toBe("VALE3"); 
+    expect(ativo.ticket).toBe("MXRF11"); 
 });
 
 test("testando post AtivosApi DELETE", async function()

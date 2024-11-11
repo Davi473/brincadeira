@@ -1,6 +1,6 @@
 import axios from "axios";
 
-test("testando post AtivosApi POST", async function()
+test("testando post AtivosApi", async function()
 {
     let lancamentoGet: string | null = null;
     const newLancamento =  {
@@ -61,6 +61,5 @@ test("testando post AtivosApi POST", async function()
     await post();
     await get();
     await put();
-    console.log(lancamentoGet);
     await deleteL();
 });
