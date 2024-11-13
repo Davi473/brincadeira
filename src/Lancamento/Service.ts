@@ -35,12 +35,17 @@ export default class LancamentoService
 
     async get (userId: string)
     {
-        return await this.repository.select(userId);
+        return await this.repository.select({id_user: userId});
     }
 
     async getID (userId: string, lancamentoId: string)
     {
         return this.existeLancamento(userId, lancamentoId);
+    }
+
+    async getAtivo (userId: string, id_ativo: string) 
+    {
+        return await this.repository.select({id_user: userId, id_ativo: id_ativo});
     }
 
     async delete (userId: string, lancamento: any)
@@ -53,12 +58,12 @@ export default class LancamentoService
     {
         this.existeLancamento(userId, lancamento.id);
         await this.repository.update(userId, lancamento);
-        return this.repository.select(userId, lancamento.id);
+        return this.repository.select({id_user: userId, id: lancamento.id});
     }
 
     private async existeLancamento (userId: string, lancamentoId: string)
     {
-        const existeLancamento = this.repository.select(userId, lancamentoId);
+        const existeLancamento = this.repository.select({id_user: userId, id: lancamentoId});
         if (!existeLancamento) throw new Error("Lançamento não existe");
         return existeLancamento;
     }

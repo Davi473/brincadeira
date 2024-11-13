@@ -17,6 +17,7 @@ test("testando post AtivosApi", async function()
             "http://localhost:3000/lancamento", newLancamento
         );
         const id = output.data.lancamento;
+        console.log(id)
         expect(typeof id).toBe("string"); 
     }
 
@@ -25,6 +26,7 @@ test("testando post AtivosApi", async function()
         const output: any = await axios.get("http://localhost:3000/lancamento");
         const lancamento = output.data[0];
         lancamentoGet = lancamento.id;
+        console.log(lancamento)
         expect(lancamento.preco).toBe(newLancamento.preco); 
     }
 

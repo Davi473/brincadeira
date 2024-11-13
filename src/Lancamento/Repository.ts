@@ -1,7 +1,7 @@
 import pgp from "pg-promise";
 
 export default interface LancamentoDAO {
-    select(userId: string, lancamentoId?: string): Promise<any>;
+    select(lancamento: { id_user: string, id?: string, id_ativo?: string }): Promise<any>;
     delete(userId: string, lancamentoId: string): Promise<void>;
     update(userId: string, lancamento: LancamentoUpdate): Promise<void>;
     insert(lancamento: LancamentoInsert): Promise<void>;
@@ -13,11 +13,13 @@ export class LancamentoDAOMemoria implements LancamentoDAO
 {
     private lancamentoMemory: LancamentoInsert[] = [];
 
-    async select(userId: string, lancamentoId?: string): Promise<any>
+    async select(lancamento: { id_user: string, id?: string, id_ativo?: string }): Promise<any>
     {
-        if (lancamentoId) return this.lancamentoMemory.filter(_lancamento => 
-            (_lancamento.id === lancamentoId && _lancamento.id_user === userId));
-        return this.lancamentoMemory.filter(_lancamento => _lancamento.id_user === userId);
+        if (lancamento.id) return this.lancamentoMemory.filter(_lancamento => 
+            (_lancamento.id === lancamento.id && _lancamento.id_user === lancamento.id_user));
+        if (lancamento.id_ativo) return this.lancamentoMemory.filter(_lancamento => 
+            (_lancamento.id_user === lancamento.id_user && _lancamento.id_ativo === lancamento.id_ativo));
+        return this.lancamentoMemory.filter(_lancamento => _lancamento.id_user === lancamento.id_user);
     }
 
     async delete(userId: string, lancamentoId: string): Promise<void> 
