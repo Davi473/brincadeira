@@ -2,6 +2,7 @@ import { Express } from "express";
 import AtivoController from "./Ativo";
 import AtivoDAO, { AtivoDAOMemoria } from "./Repository";
 import AtivoService from "./Service";
+import DBConnect from "../Config/DBConfig";
 
 export default class AtivoModule
 {   
@@ -11,6 +12,7 @@ export default class AtivoModule
 
     constructor(
         private api: Express,
+        private connection: DBConnect
     ) {
         this.repository = new AtivoDAOMemoria();
         this.service = new AtivoService(this.repository);

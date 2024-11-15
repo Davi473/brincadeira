@@ -1,8 +1,8 @@
 import pgp from "pg-promise";
 
 export default interface CarteiraDAO {
-    select(userId: string): Promise<any>;
-    update(userId: string, carteira: CarteiraInsert): Promise<void>;
+    select(ativo: CarteiraSelect): Promise<any>;
+    update(carteira: CarteiraInsert): Promise<void>;
     insert(carteira: CarteiraInsert): Promise<void>;
 }
 
@@ -12,15 +12,20 @@ export class CarteiraDAOMemoria implements CarteiraDAO
 {
     private carteiraMemory: CarteiraInsert[] = [];
 
-    async select(userId: string): Promise<any>
+    async select(ativo: CarteiraSelect): Promise<any>
     {
-        return this.carteiraMemory.filter(_carteira => _carteira.id_user === userId);
+        if (ativo.id) return this.carteiraMemory.filter(_carteira => 
+            (_carteira.id_user === ativo.id_user && _carteira.id === ativo.id));
+        if (ativo.id_ativo) return this.carteiraMemory.filter(_carteira => 
+            (_carteira.id_user === ativo.id_user && _carteira.id_ativo === ativo.id_ativo));
+        return this.carteiraMemory.filter(_carteira => (_carteira.id_user === ativo.id_user));
     }
 
-    async update(userId: string, carteira: CarteiraInsert): Promise<void> 
+    async update(carteira: CarteiraInsert): Promise<void> 
     {
         const index = this.carteiraMemory.findIndex((_carteira) => 
-            (_carteira.id === carteira.id && _carteira.id_user === userId && _carteira.id_ativo === carteira.id_ativo));
+            (_carteira.id_user === carteira.id_user && 
+                _carteira.id_ativo === carteira.id_ativo));
         this.carteiraMemory[index].quantidade = carteira.quantidade;
         this.carteiraMemory[index].media = carteira.media;
     }
@@ -29,6 +34,12 @@ export class CarteiraDAOMemoria implements CarteiraDAO
     {
         this.carteiraMemory.push(lancamento);
     }
+}
+
+export type CarteiraSelect = {
+    id_user: string,
+    id_ativo?: string,
+    id?: string
 }
 
 export type CarteiraInsert = {

@@ -1,15 +1,14 @@
-import crypto from "crypto";
 import LancamentoDAO from "./Repository";
 import AtivoService from "../Ativo/Service";
+import CarteiraService from "../Carteira/Service";
+import Lancamento from "./ObjectLancamento";
 
 export default class LancamentoService
 {
     constructor (
         private repository: LancamentoDAO,
-        private serviceAtivo: AtivoService
-        /*
+        private serviceAtivo: AtivoService,
         private serviceCarteira: CarteiraService
-        */
     ) {}
 
     async post (userId: string, lancamento: any)
@@ -18,19 +17,12 @@ export default class LancamentoService
         if (lancamento.preco < 0) throw new Error("Lançamento não posssui valor");
         if (!lancamento.data) throw new Error("Não tem data");
         if (lancamento.compra !== true && lancamento.compra !== false) throw new Error("Não possui ordem de compra ou venda");
-        const [id_ativo] = await this.serviceAtivo.get(lancamento);
-        if (id_ativo === undefined) throw new Error("ativo não encontrado");
-        const _lancamento = {
-            id: crypto.randomUUID(),
-            id_ativo: id_ativo.id,
-            id_user: userId,
-            quantidade: lancamento.quantidade,
-            preco: lancamento.preco,
-            data: lancamento.data,
-            compra: lancamento.compra
-        };
+        if (!lancamento.id) throw new Error("Lançamento sem id");
+        this.serviceAtivo.existAtivo(lancamento.id);
+        const _lancamento = new Lancamento(lancamento);
         await this.repository.insert(_lancamento);
-        return {lancamento: _lancamento.id};
+        const carteira = await this.serviceCarteira.recalcularMedia(userId, lancamento.id);
+        return carteira;
     }
 
     async get (userId: string)
@@ -59,6 +51,11 @@ export default class LancamentoService
         this.existeLancamento(userId, lancamento.id);
         await this.repository.update(userId, lancamento);
         return this.repository.select({id_user: userId, id: lancamento.id});
+    }
+
+    private lancamnetoCorreto (lancamento: any)
+    {
+
     }
 
     private async existeLancamento (userId: string, lancamentoId: string)

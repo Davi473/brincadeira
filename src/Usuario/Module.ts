@@ -2,6 +2,7 @@ import { Express } from "express";
 import RegisterModule from "./Register/Module";
 import UsuarioDAO, { UsuarioDAOMemoria } from "./Repository";
 import LoginModule from "./Login/Module";
+import DBConnect from "../Config/DBConfig";
 
 export default class UsuarioModule
 {   
@@ -11,6 +12,7 @@ export default class UsuarioModule
 
     constructor(
         private api: Express,
+        private connection: DBConnect
     ) {
         this.repository = new UsuarioDAOMemoria();
         this.registerModule = new RegisterModule(this.api, this.repository);

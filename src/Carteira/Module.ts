@@ -3,6 +3,7 @@ import CarteiraController from "./Carteira";
 import CarteiraDAO, { CarteiraDAOMemoria } from "./Repository";
 import { Express } from "express";
 import CarteiraService from "./Service";
+import DBConnect from "../Config/DBConfig";
 
 export default class CarteiraModule
 {   
@@ -12,6 +13,7 @@ export default class CarteiraModule
 
     constructor(
         private api: Express,
+        private connection: DBConnect,
         private serviceAtivo: AtivoService
     ) {
         this.repository = new CarteiraDAOMemoria();

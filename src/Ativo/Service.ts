@@ -24,14 +24,18 @@ export default class AtivoService
 
     async get (ativo?: any)
     {
-        if(ativo) return await this.repository.select(ativo);
         return await this.repository.select(ativo);
     }
 
     async delete (ativo: any)
     {
-        const existAtivo = this.repository.select({id: ativo.id});
-        if (!existAtivo) throw new Error("Não existe");
+        this.existAtivo(ativo.id);
         await this.repository.delete(ativo);
+    }
+
+    public async existAtivo (id: string) 
+    {
+        const existAtivo = this.repository.select({id: id});
+        if (!existAtivo) throw new Error("Não existe");
     }
 }

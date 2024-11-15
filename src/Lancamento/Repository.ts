@@ -1,45 +1,46 @@
 import pgp from "pg-promise";
+import Lancamento from "./ObjectLancamento";
 
 export default interface LancamentoDAO {
     select(lancamento: { id_user: string, id?: string, id_ativo?: string }): Promise<any>;
     delete(userId: string, lancamentoId: string): Promise<void>;
     update(userId: string, lancamento: LancamentoUpdate): Promise<void>;
-    insert(lancamento: LancamentoInsert): Promise<void>;
+    insert(lancamento: Lancamento): Promise<void>;
 }
 
 // export class LancamentoDAODataBase implements LancamentoDAO {}
 
 export class LancamentoDAOMemoria implements LancamentoDAO
 {
-    private lancamentoMemory: LancamentoInsert[] = [];
+    private lancamentoMemory: Lancamento[] = [];
 
     async select(lancamento: { id_user: string, id?: string, id_ativo?: string }): Promise<any>
     {
         if (lancamento.id) return this.lancamentoMemory.filter(_lancamento => 
-            (_lancamento.id === lancamento.id && _lancamento.id_user === lancamento.id_user));
+            (_lancamento.getID() === lancamento.id && _lancamento.getIDUser() === lancamento.id_user));
         if (lancamento.id_ativo) return this.lancamentoMemory.filter(_lancamento => 
-            (_lancamento.id_user === lancamento.id_user && _lancamento.id_ativo === lancamento.id_ativo));
-        return this.lancamentoMemory.filter(_lancamento => _lancamento.id_user === lancamento.id_user);
+            (_lancamento.getIDUser() === lancamento.id_user && _lancamento.getIDAtivo() === lancamento.id_ativo));
+        return this.lancamentoMemory.filter(_lancamento => _lancamento.getIDUser() === lancamento.id_user);
     }
 
     async delete(userId: string, lancamentoId: string): Promise<void> 
     {
         const index = this.lancamentoMemory.findIndex((_lancamento) =>
-            (_lancamento.id === lancamentoId && _lancamento.id_user == userId));
+            (_lancamento.getID() === lancamentoId && _lancamento.getIDUser() == userId));
         this.lancamentoMemory.splice(index, (index + 1));
     }
 
     async update(userId: string, lancamento: LancamentoUpdate): Promise<void> 
     {
         const index = this.lancamentoMemory.findIndex((_lancamento) => 
-            (_lancamento.id === lancamento.id && _lancamento.id_user === userId));
-        this.lancamentoMemory[index].quantidade = lancamento.quantidade;
-        this.lancamentoMemory[index].preco = lancamento.preco;
-        this.lancamentoMemory[index].data = lancamento.data;
-        this.lancamentoMemory[index].compra = lancamento.compra;
+            (_lancamento.getID() === lancamento.id && _lancamento.getIDUser() === userId));
+        this.lancamentoMemory[index].setQuantidade(lancamento.quantidade);
+        this.lancamentoMemory[index].setPreco(lancamento.preco);
+        this.lancamentoMemory[index].setData(lancamento.data);
+        this.lancamentoMemory[index].setCompra(lancamento.compra);
     }
 
-    async insert(lancamento: LancamentoInsert): Promise<void>
+    async insert(lancamento: Lancamento): Promise<void>
     {
         this.lancamentoMemory.push(lancamento);
     }

@@ -3,6 +3,7 @@ import LancamentoController from "./Lancamento";
 import LancamentoDAO, { LancamentoDAOMemoria } from "./Repository";
 import { Express } from "express";
 import LancamentoService from "./Service";
+import DBConnect from "../Config/DBConfig";
 
 export default class LancamentoModule
 {   
@@ -12,6 +13,7 @@ export default class LancamentoModule
 
     constructor(
         private api: Express,
+        private connection: DBConnect,
         private serviceAtivo: AtivoService
     ) {
         this.repository = new LancamentoDAOMemoria();
