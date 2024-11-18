@@ -1,9 +1,10 @@
 import AtivoService from "../Ativo/Service";
 import LancamentoController from "./Lancamento";
 import LancamentoDAO, { LancamentoDAOMemoria } from "./Repository";
-import { Express } from "express";
 import LancamentoService from "./Service";
-import DBConnect from "../Config/DBConfig";
+import DBConnect from "../Config/DBConnect/DBConnect";
+import ApiHttp from "../Config/ApiHttp/ApiHttp";
+import CarteiraService from "../Carteira/Service";
 
 export default class LancamentoModule
 {   
@@ -12,12 +13,13 @@ export default class LancamentoModule
     private controller: LancamentoController;
 
     constructor(
-        private api: Express,
+        private api: ApiHttp,
         private connection: DBConnect,
-        private serviceAtivo: AtivoService
+        private serviceAtivo: AtivoService,
+        private serviceCarteira: CarteiraService
     ) {
-        this.repository = new LancamentoDAOMemoria();
-        this.service = new LancamentoService(this.repository, this.serviceAtivo);
+        this.repository = new LancamentoDAOMemoria(this.connection);
+        this.service = new LancamentoService(this.repository, this.serviceAtivo, this.serviceCarteira);
         this.controller = new LancamentoController(this.api, this.service);
     }
 }

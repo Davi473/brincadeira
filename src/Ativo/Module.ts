@@ -1,8 +1,8 @@
-import { Express } from "express";
 import AtivoController from "./Ativo";
 import AtivoDAO, { AtivoDAOMemoria } from "./Repository";
 import AtivoService from "./Service";
-import DBConnect from "../Config/DBConfig";
+import DBConnect from "../Config/DBConnect/DBConnect";
+import ApiHttp from "../Config/ApiHttp/ApiHttp";
 
 export default class AtivoModule
 {   
@@ -11,7 +11,7 @@ export default class AtivoModule
     private controller: AtivoController;
 
     constructor(
-        private api: Express,
+        private api: ApiHttp,
         private connection: DBConnect
     ) {
         this.repository = new AtivoDAOMemoria();

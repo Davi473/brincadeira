@@ -1,10 +1,9 @@
 import pgPromise, { IDatabase, IMain } from "pg-promise";
 
-export default abstract class DBConnect {
-    constructor (private config: string | DBConfig) {}
-    abstract connect(): Promise<void>;
-    abstract query (query: string, params?: any[]): Promise<any>;
-    abstract close (): Promise<void>;
+export default interface DBConnect {
+    connect(): Promise<void>;
+    query (query: string, params?: any[]): Promise<any>;
+    close (): Promise<void>;
 }
 
 type DBConfig = {
@@ -15,14 +14,13 @@ type DBConfig = {
 }
 
 
-export class PostgresConnection extends DBConnect
+export class PostgresConnection implements DBConnect
 {
     private pgConnection: IDatabase<{}>;
     private pgp: IMain = pgPromise();
 
     constructor (config: string)
     {
-        super(config);
         this.pgConnection = this.pgp(config);
     }
 

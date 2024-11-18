@@ -3,8 +3,8 @@ export default class Lancamento
     private id: string;
     constructor (private lancamento: any) 
     { 
-        if ()
-        this.id = crypto.randomUUID(); 
+        this.id = this.lancamento.id;
+        if (!this.lancamento.id) this.id = crypto.randomUUID();
     }
     public getID (): string { return this.id; }
     public getIDUser () { return this.lancamento.id_user; }
