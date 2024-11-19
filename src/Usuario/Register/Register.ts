@@ -1,13 +1,13 @@
-import { Express } from "express";
 import RegisterService from "./Service";
+import ApiHttp from "../../Config/ApiHttp/ApiHttp";
 
 export default class RegisterController
 {
     constructor (
-        private api: Express,
+        private api: ApiHttp,
         private service: RegisterService
     ) {
-        this.api.post("/register", async (req: any, res: any) =>
+        this.api.register("post", "/register", async (req: any, res: any) =>
         {
             const { name, passoword } = req.body;
             try {
@@ -18,7 +18,7 @@ export default class RegisterController
             }
         });
 
-        this.api.delete("/register", async (req: any, res: any) =>
+        this.api.register("delete", "/register", async (req: any, res: any) =>
         {
             const { name, passoword } = req.body; 
             try {
@@ -29,7 +29,7 @@ export default class RegisterController
             }
         });
 
-        this.api.get("/register", async (req: any, res: any) =>
+        this.api.register("get", "/register", async (req: any, res: any) =>
         {
             const { name, passoword } = req.body; 
             try {

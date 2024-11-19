@@ -1,7 +1,7 @@
-import { Express } from "express";
 import RegisterService from "../Register/Service";
 import LoginService from "./Service";
 import LoginController from "./Login";
+import ApiHttp from "../../Config/ApiHttp/ApiHttp";
 
 
 export default class LoginModule
@@ -10,7 +10,7 @@ export default class LoginModule
     private controller: LoginController
 
     constructor (
-        private api: Express,
+        private api: ApiHttp,
         private serviceRegister: RegisterService
     ) {
         this.service = new LoginService(this.serviceRegister);

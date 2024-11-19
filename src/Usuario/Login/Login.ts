@@ -1,17 +1,18 @@
-import { Express } from "express";
 import LoginService from "./Service";
+import ApiHttp from "../../Config/ApiHttp/ApiHttp";
 
 export default class LoginController
 {
     constructor (
-        private api: Express,
+        private api: ApiHttp,
         private service: LoginService
     ) {
-        this.api.post("/login", async (req: any, res: any) =>
+        this.api.register("post", "/login", async (req: any, res: any) =>
         {
-            const { name, passoword } = req.body;
+            const { name, password } = req.body;
+            console.log(name, password);
             try {
-                const output = await this.service.post(name, passoword);
+                const output = await this.service.post(name, password);
                 res.json(output);
             } catch (e: any) {
                 res.status(422).json({ message: e.message});

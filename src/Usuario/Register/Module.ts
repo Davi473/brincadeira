@@ -2,6 +2,7 @@ import UsuarioDAO from "../Repository";
 import { Express } from "express";
 import RegisterService from "./Service";
 import RegisterController from "./Register";
+import ApiHttp from "../../Config/ApiHttp/ApiHttp";
 
 
 export default class RegisterModule
@@ -10,7 +11,7 @@ export default class RegisterModule
     private controller: RegisterController
 
     constructor (
-        private api: Express,
+        private api: ApiHttp,
         private repository: UsuarioDAO
     ) {
         this.service = new RegisterService(this.repository);

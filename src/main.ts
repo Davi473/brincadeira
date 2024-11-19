@@ -6,16 +6,16 @@ import "dotenv/config";
 import ApiHttp, { ApiHttpExpress } from "./Config/ApiHttp/ApiHttp";
 
 // @ts-ignore
-const PORT: string = process.env.CONFIG_POSTGRES;
+const PORT: string = process.env.PORT_SERVER;
 // @ts-ignore
-const configPostgres: string =  process.env.CONFIG_POSTGRES;
+//const configPostgres: string =  process.env.CONFIG_POSTGRES;
 
 const api: ApiHttp =  new ApiHttpExpress();
+ 
+// const postgresDB: DBConnect = new PostgresConnection(configPostgres);
 
-const postgresDB: DBConnect = new PostgresConnection(configPostgres);
-
-const ativo: AtivoModule = new AtivoModule(api, postgresDB);
-const lancamento: LancamentoModule = new LancamentoModule(api, postgresDB, ativo.isService());
-const usuario: UsuarioModule = new UsuarioModule(api, postgresDB);
+// const ativo: AtivoModule = new AtivoModule(api, postgresDB);
+// const lancamento: LancamentoModule = new LancamentoModule(api, postgresDB, ativo.isService());
+const usuario: UsuarioModule = new UsuarioModule(api);
 
 api.listen(PORT);

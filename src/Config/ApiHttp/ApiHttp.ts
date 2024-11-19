@@ -34,7 +34,7 @@ export class ApiHttpExpress implements ApiHttp
 
   async listen(port: string | number): Promise<void> 
   {
-    this.api.listen(port, () => {`Servidor aberto ${port}`});
+    this.api.listen(port, () => {console.log(`Servidor aberto ${port}`)});
   }
   
 }
