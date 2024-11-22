@@ -14,10 +14,12 @@ export default class RegisterController
                 const output = await this.service.post(name, passoword);
                 res.json(output);
             } catch (e: any) {
+                console.log(e.message);
                 res.status(422).json({ message: e.message});
             }
         });
-
+        /**
+        * Em manutenção
         this.api.register("delete", "/register", async (req: any, res: any) =>
         {
             const { name, passoword } = req.body; 
@@ -28,7 +30,7 @@ export default class RegisterController
                 res.status(422).json({ message: e.message });
             }
         });
-
+        */
         this.api.register("get", "/register", async (req: any, res: any) =>
         {
             const { name, passoword } = req.body; 

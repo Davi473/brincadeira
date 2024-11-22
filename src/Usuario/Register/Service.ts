@@ -12,16 +12,16 @@ export default class RegisterService
     {
         this.verificarValores(name, senha);
         await this.usuarioExiste(name);
-        const _usuario = {
+        const usuario = {
             id: crypto.randomUUID(),
             name: name,
             hash: await Hash.createHash(senha),
-            createAd: new Date()
+            createDat: new Date()
         };
-        await this.repository.insert(_usuario);
-        return await this.repository.select(name);
+        await this.repository.insert(usuario)
+        return await this.nameUser(name);
     }
-
+    /*
     async delete(name: string, senha: string)
     {
         this.verificarValores(name, senha);
@@ -31,18 +31,23 @@ export default class RegisterService
         await this.repository.delete(name);
         return { message: "Usuario deletado" };
     }
-
+    */
     public async get(name: string, senha: string)
     {
         this.verificarValores(name, senha);
-        const [usuario] = await this.repository.select(name);
-        return { id: usuario.id, name: usuario.name };
+        return await this.nameUser(name);
     }
 
-    async usuarioExiste(name: string)
+    private async nameUser(name: string)
+    {
+        const user = await this.repository.select(name);
+        return { id: user.id, name: user.name };
+    }
+
+    private async usuarioExiste(name: string)
     {
         const usuario = await this.repository.select(name);
-        if (usuario[0]) throw new Error("Usuario ja existe");
+        if (usuario) throw new Error("Usuario ja existe");
     }
 
     verificarValores(name: string, senha: string)

@@ -3,11 +3,34 @@ import pgp from "pg-promise";
 export default interface UsuarioDAO {
     select(name: string): Promise<any>;
     delete(name: string): Promise<void>;
-    insert(lancamento: UsuarioModel): Promise<void>;
+    insert(user: any): Promise<void>;
 }
 
-// export class UsuarioDAODataBase implements UsuarioDAO {}
+export class UsuarioDAODataBase implements UsuarioDAO 
+{
+    async select(name: string): Promise<any> 
+    {
+        const connection = pgp()("postgres://postgres:1234@localhost:5432/investment");
+		const [user] = await connection.query("select * from usuarios where name = $1", [name]);
+		await connection.$pool.end();
+		return user;
+    }
 
+    delete(name: string): Promise<void> 
+    {
+        throw new Error("Method not implemented.");
+    }
+
+    async insert(user: any): Promise<void> 
+    {
+        const connection = pgp()("postgres://postgres:1234@localhost:5432/investment");
+		await connection.query(`insert into usuarios (id, name, hash, createdat) 
+            values ($1, $2, $3, $4)`, 
+            [user.id, user.name, user.hash, user.createDat]);
+		await connection.$pool.end();
+    }
+}
+/*
 export class UsuarioDAOMemoria implements UsuarioDAO
 {
     private usuarioMemory: UsuarioModel[] = [
@@ -35,10 +58,4 @@ export class UsuarioDAOMemoria implements UsuarioDAO
         this.usuarioMemory.push(lancamento);
     }
 }
-
-type UsuarioModel = {
-  id?: string,
-  name: string,
-  hash: string,
-  createAd: Date
-}   
+*/
